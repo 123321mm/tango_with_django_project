@@ -41,6 +41,8 @@ def index(request):
 	context_dict = {}
 	context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
 	context_dict['categories'] = category_list
+	pages_list = Page.objects.order_by('-views')[:5]
+	context_dict['pages'] = pages_list
 	# Render the response and send it back!
 	return render(request, 'rango/index.html', context=context_dict)
 
