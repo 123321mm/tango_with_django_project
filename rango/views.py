@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from rango.forms import PageForm
 from django.urls import reverse
 from rango.forms import UserForm, UserProfileForm
+from django.contrib.auth import authenticate, login
 
 
 def show_category(request, category_name_slug):
@@ -134,3 +135,32 @@ def register(request):
 				context = {'user_form': user_form,
 							'profile_form': profile_form,
 							'registered': registered})
+
+def user_login(request):
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		# Use Django's machinery to attempt to see if the username/password
+		# combination is valid - a User object is returned if it is.
+		user = authenticate(username=username, password=password)
+		# If we have a User object, the details are correct.
+		# If None (Python's way of representing the absence of a value), no user
+		# with matching credentials was found.
+		if user:
+			# Is the account active? It could have been disabled.
+			if user.is_active:
+				# If the account is valid and active, we can log the user in.
+				# We'll send the user back to the homepage.
+				login(request, user)
+				return redirect(reverse('rango:index'))
+			else:
+				# An inactive account was used - no logging in!
+				return HttpResponse("Your Rango account is disabled.")
+		else:
+			# Bad login details were provided. So we can't log the user in.
+			print(f"Invalid login details: {username}, {password}")
+			return HttpResponse("Invalid login details supplied.")
+	else:
+		# No context variables to pass to the template system, hence the
+		# blank dictionary object...
+		return render(request, 'rango/login.html')
