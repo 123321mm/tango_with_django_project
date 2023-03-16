@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+REGISTRATION_OPEN = True
+REGISTRATION_AUTO_LOGIN = True
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
@@ -29,6 +32,10 @@ SECRET_KEY = 'ffe&9_2e3t9j+1@yhca*=g%6z=r)69#w%aqvpemb9f+#00*q-f'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+ACCOUNT_ACTIVATION_DAYS = 7
+
+
+LOGIN_URL = 'auth_login'
 
 
 # Application definition
@@ -135,3 +142,5 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 STATIC_URL = '/static/'
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+LOGIN_REDIRECT_URL = 'rango:index'
+
